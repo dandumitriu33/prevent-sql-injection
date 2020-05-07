@@ -16,9 +16,11 @@ public class TodoDaoImplWithJdbc implements TodoDao {
     @Override
     public void add(Todo todo) {
         String validatedTitle = validateTitle(todo.title);
-        String query = "INSERT INTO todos (title, id, status) " +
-                "VALUES ('" + validatedTitle + "', '" + todo.id + "', '" + todo.status + "');";
-        executeQuery(query);
+//        String query = "INSERT INTO todos (title, id, status) " +
+//                "VALUES ('" + validatedTitle + "', '" + todo.id + "', '" + todo.status + "');";
+//        executeQuery(query);
+
+        executePreparedQuery(validatedTitle, todo.id, todo.status);
     }
 
     private String validateTitle(String title) {
@@ -164,6 +166,20 @@ public class TodoDaoImplWithJdbc implements TodoDao {
              Statement statement =connection.createStatement();
         ){
             statement.execute(query);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void executePreparedQuery(String title, String id, Status status) {
+        try {
+            Connection connection = getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO todos (title, id, status) " +
+                "VALUES (?, '" + id + "', '" + status + "');");
+            preparedStatement.setString(1, title);
+
+            preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();
