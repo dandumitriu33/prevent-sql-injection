@@ -1,2 +1,3 @@
+*** EDUCATIONAL PROJECT WITH THE PURPOSE OF TEACHING SQL INJECTION PROTECTION ***
 With the following input I managed to commit SQL injection:
 ad', '1', 'ACTIVE'); DROP TABLE todos;--
